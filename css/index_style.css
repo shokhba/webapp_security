@@ -1,0 +1,94 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #0a0a0f;
+    font-family: 'Space Mono', monospace;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+body::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(0, 255, 150, 0.03) 40px, rgba(0, 255, 150, 0.03) 41px),
+        repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(0, 255, 150, 0.03) 40px, rgba(0, 255, 150, 0.03) 41px);
+    pointer-events: none;
+}
+
+.container {
+    text-align: center;
+    z-index: 1;
+}
+
+.tag {
+    color: #00ff96;
+    font-size: 0.75rem;
+    letter-spacing: 4px;
+    margin-bottom: 20px;
+}
+
+h1 {
+    font-size: 3.5rem;
+    color: #fff;
+    line-height: 1.1;
+    margin-bottom: 10px;
+}
+
+h1 span {
+    color: #00ff96;
+}
+
+p {
+    color: #555;
+    font-size: 0.75rem;
+    margin-bottom: 30px;
+}
+
+.btns {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.btn-login {
+    background: #00ff96;
+    color: #000;
+    padding: 12px 28px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.btn-signup {
+    background: transparent;
+    color: #00ff96;
+    padding: 12px 28px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    border: 1px solid #00ff96;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.btn-login:hover {
+    background: #00cc78;
+}
+
+.btn-signup:hover {
+    background: rgba(0, 255, 150, 0.1);
+}

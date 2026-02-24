@@ -1,0 +1,153 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #0a0a0f;
+    font-family: 'Space Mono', monospace;
+    min-height: 100vh;
+    color: #fff;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+        repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(0, 255, 150, 0.03) 40px, rgba(0, 255, 150, 0.03) 41px),
+        repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(0, 255, 150, 0.03) 40px, rgba(0, 255, 150, 0.03) 41px);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    border-bottom: 1px solid rgba(0, 255, 150, 0.15);
+    background: rgba(10, 10, 15, 0.95);
+    backdrop-filter: blur(10px);
+    z-index: 100;
+    position: sticky;
+    top: 0;
+}
+
+.navbar .welcome {
+    color: #00ff96;
+    font-size: 0.8rem;
+    letter-spacing: 3px;
+}
+
+.navbar .nav-links {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.navbar .nav-links a {
+    color: #555;
+    text-decoration: none;
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    transition: color 0.2s;
+}
+
+.navbar .nav-links a:hover {
+    color: #00ff96;
+}
+
+.navbar img {
+    border-radius: 50%;
+    border: 2px solid rgba(0, 255, 150, 0.3);
+    width: 45px;
+    height: 45px;
+    object-fit: cover;
+}
+
+.main {
+    max-width: 500px;
+    margin: 60px auto;
+    padding: 0 20px;
+    position: relative;
+    z-index: 1;
+}
+
+.container {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(0, 255, 150, 0.15);
+    padding: 40px;
+}
+
+.tag {
+    color: #00ff96;
+    font-size: 0.7rem;
+    letter-spacing: 4px;
+    margin-bottom: 25px;
+}
+
+.profile-pic-section {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.profile-img {
+    border-radius: 50%;
+    border: 3px solid rgba(0, 255, 150, 0.3);
+    object-fit: cover;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    color: #00ff96;
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+}
+
+.form-group input {
+    width: 100%;
+    background: rgba(0, 255, 150, 0.05);
+    border: 1px solid rgba(0, 255, 150, 0.2);
+    color: #fff;
+    padding: 12px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    outline: none;
+}
+
+.form-group input:focus {
+    border-color: #00ff96;
+}
+
+.form-group input[type="file"] {
+    background: transparent;
+    border: 1px dashed rgba(0, 255, 150, 0.2);
+    color: #555;
+    cursor: pointer;
+}
+
+.btn-submit {
+    width: 100%;
+    background: #00ff96;
+    color: #000;
+    padding: 12px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.btn-submit:hover {
+    background: #00cc78;
+}
