@@ -65,9 +65,9 @@ if (isset($_POST['submit'])) {
 
         while ($post = mysqli_fetch_assoc($result)) {
             echo "<div class='post-card'>";
-            echo "<h3>" . $post['title'] . "</h3>";
-            echo "<p>" . $post['content'] . "</p>";
-            echo "<div class='by'>BY: " . $post['username'] . "</div>";
+            echo "<h3>" .  htmlspecialchars($post['title']) . "</h3>";
+            echo "<p>" . htmlspecialchars($post['content']) . "</p>";
+            echo "<div class='by'>BY: " . htmlspecialchars($post['username']) . "</div>";
 
             $post_id = $post['id'];
             $comments_query = "SELECT comments.content, users.username 
@@ -76,7 +76,7 @@ if (isset($_POST['submit'])) {
                                WHERE comments.post_id = '$post_id'";
             $comments_result = mysqli_query($conn, $comments_query);
             while ($comment = mysqli_fetch_assoc($comments_result)) {
-                echo "<div class='comment'><span>" . $comment['username'] . "</span>: " . $comment['content'] . "</div>";
+                echo "<div class='comment'><span>" . htmlspecialchars($comment['username']) . "</span>: " . htmlspecialchars($comment['content']) . "</div>";
             }
 
             echo "<form class='comment-form' action='comments.php' method='POST'>";

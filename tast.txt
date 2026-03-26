@@ -1,0 +1,139 @@
+<?php 
+
+$conn=mysqli_connect('localhost','root','','webapp_security');
+
+if(!$conn){
+    echo 'Error : ' . mysqli_connect_error();
+}
+
+$Username = $_POST['username'];
+$Email = $_POST['email'];
+
+if(isset($_POST['submit'])){
+   // echo $Firstname . ' ' . $Lastname .' '.$Email;
+   $query ="INSERT INTO users(id,username , email, password ,profile_pic,created_at) 
+   values('25','username', 'Email','password','profile_pic','created_at')";
+   mysqli_query($conn,$query);
+}
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+    <script src="./js/script.js"></script>
+
+    <form   action="index.php" method="POST">
+        <input type="text" name="username" id="username" placeholder="username">
+        <input type="text" name="email" id="email" placeholder="email">
+        <input type="submit" name="submit" value="submit">
+    </form>
+</body>
+</html>
+/*
+$Username =isset($_POST['username'])?$_POST['username']:'';
+$Email =isset($_POST['email'])?$_POST['email']:'';
+$Password =isset($_POST['password'])?$_POST['password']:'';
+$Confirmpassword =isset($_POST['confirmpassword'])?$_POST['confirmpassword']:'';
+
+if($Password==$Confirmpassword){
+    $hash_pass = password_hash($Password, PASSWORD_DEFAULT);
+    $query="INSERT INTO users(username , email , password) 
+        values( '$Username', '$Email' , '$hash_pass' ) ";
+    mysqli_query($conn, $query);
+    echo "User created successfully!";
+
+} else {
+    echo "Passwords don't match!";
+}
+*/
+/*
+password_verify(password_hash($Password, PASSWORD_DEFAULT),$result);
+
+    if( password_verify(password_hash($Password, PASSWORD_DEFAULT),$result)){
+        echo "Login successful!";
+    } else {
+        echo "Invalid email or password!";
+    }
+        */
+
+
+
+        <?php
+    $query = "SELECT posts.title, posts.content, users.username , comments.content , comments.user_id , posts.id
+    FROM posts 
+    JOIN users ON posts.user_id = users.id";
+    $result = mysqli_query($conn, $query);
+
+while($post = mysqli_fetch_assoc($result)){
+    echo "<div>";
+    echo "<h3>" . $post['title'] . "</h3>";
+    echo "<p>" . $post['content'] . "</p>";
+    echo "<small>By: " . $post['username'] . "</small>";
+    echo "</div>";
+    echo "<hr>";
+}
+?>
+$query = "SELECT posts.id, posts.title, posts.content, users.username 
+          FROM posts 
+          JOIN users ON posts.user_id = users.id
+          WHERE posts.user_id != '{$_SESSION['user_id']}'";
+$result = mysqli_query($conn, $query);
+
+while($post = mysqli_fetch_assoc($result)){
+    echo "<div>";
+    echo "<h3>" . $post['title'] . "</h3>";
+    echo "<p>" . $post['content'] . "</p>";
+    echo "<small>By: " . $post['username'] . "</small>";
+    
+    $post_id = $post['id'];
+    $comments_query = "SELECT comments.content, users.username 
+                       FROM comments 
+                       JOIN users ON comments.user_id = users.id
+                       WHERE comments.post_id = '$post_id'";
+    $comments_result = mysqli_query($conn, $comments_query);
+    while($comment = mysqli_fetch_assoc($comments_result)){
+        echo "<p>" . $comment['username'] . ": " . $comment['content'] . "</p>";
+    }
+
+    echo "<form action='comments.php' method='POST'>";
+    echo "<input type='hidden' name='post_id' value='" . $post['id'] . "'>";
+    echo "<textarea name='comments' placeholder='Write a comment'></textarea>";
+    echo "<input type='submit' name='submit' value='Comment'>";
+    echo "</form>";
+    
+    echo "</div>";
+    echo "<hr>";
+}
+<!--jwt.php-->
+<?php
+require_once 'vendor/autoload.php';
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
+
+$secret_key = "mysecretkey123";
+
+function generateToken($user_id, $username){
+    global $secret_key;
+    $payload = [
+        'user_id' => $user_id,
+        'username' => $username,
+        'exp' => time() + 3600
+    ];
+    return JWT::encode($payload, $secret_key, 'HS256');
+}
+
+function verifyToken($token){
+    global $secret_key;
+    try {
+        $decoded = JWT::decode($token, new Key($secret_key, 'HS256'));
+        return $decoded;
+    } catch(Exception $e) {
+        return null;
+    }
+}
+?>

@@ -3,6 +3,12 @@
 <?php 
 
 session_start(); 
+
+if(!isset($_SESSION['user_id'])){
+    header('Location: login.php');
+    exit();
+}
+
 $conn = mysqli_connect('localhost','root','','webapp_security');
 
 

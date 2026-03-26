@@ -1,5 +1,12 @@
+<!--search.php-->
 <?php
 session_start();
+
+if(!isset($_SESSION['user_id'])){
+    header('Location: login.php');
+    exit();
+}
+
 $conn = mysqli_connect('localhost', 'root', '', 'webapp_security');
 $search = isset($_GET['search']) ? $_GET['search'] : '';
 $query = "SELECT posts.*, users.username 
@@ -30,17 +37,17 @@ $result = mysqli_query($conn, $query);
 
     <div class="main">
         <form class="search-form" action="search.php" method="GET">
-            <input type="text" name="search" placeholder="SEARCH POSTS..." value="<?php echo $search; ?>">
+            <input type="text" name="search" placeholder="SEARCH POSTS..." value="<?php echo htmlspecialchars($search)?>">
             <input type="submit" value="SEARCH">
         </form>
 
-        <div class="tag">RESULTS FOR: <span><?php echo $search; ?></span></div>
+        <div class="tag">RESULTS FOR: <span><?php echo htmlspecialchars($search); ?></span></div>
 
         <?php while ($post = mysqli_fetch_assoc($result)) { ?>
             <div class="post-card">
-                <h3><?php echo $post['title']; ?></h3>
-                <p><?php echo $post['content']; ?></p>
-                <div class="by">BY: <?php echo $post['username']; ?></div>
+                <h3><?php echo htmlspecialchars($post['title']); ?></h3>
+                <p><?php echo htmlspecialchars($post['content']); 2?></p>
+                <div class="by">BY: <?php echo htmlspecialchars($post['username']); ?></div>
             </div>
         <?php } ?>
     </div>

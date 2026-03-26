@@ -8,6 +8,25 @@ if (isset($_POST['submit'])) {
     $Password = $_POST['password'];
     $Confirmpassword = $_POST['confirmpassword'];
 
+    // Regex username
+    if(!preg_match('/^[a-zA-Z0-9_]{3,20}$/', $Username)){
+        echo "input valid please Validate username - letters, numbers, underscore only";
+        exit();
+    }
+
+    // Regex email
+    if(!filter_var($Email, FILTER_VALIDATE_EMAIL)){
+        echo "Invalid email!";
+        exit();
+    }
+
+ // Regex password
+    if(!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/', $Password)){
+        echo "Password must be 8+ chars, uppercase, lowercase, number, special character!";
+        exit();
+    }
+    
+
     if ($Password == $Confirmpassword) {
         $hash_pass = password_hash($Password, PASSWORD_DEFAULT);
         $query = "INSERT INTO users(username, email, password) VALUES('$Username', '$Email', '$hash_pass')";
