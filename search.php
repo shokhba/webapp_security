@@ -2,7 +2,7 @@
 <?php
 session_start();
 
-if(!isset($_SESSION['user_id'])){
+if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
     exit();
 }
@@ -37,7 +37,7 @@ $result = mysqli_query($conn, $query);
 
     <div class="main">
         <form class="search-form" action="search.php" method="GET">
-            <input type="text" name="search" placeholder="SEARCH POSTS..." value="<?php echo htmlspecialchars($search)?>">
+            <input type="text" name="search" placeholder="SEARCH POSTS..." value="<?php echo htmlspecialchars($search) ?>">
             <input type="submit" value="SEARCH">
         </form>
 
@@ -46,7 +46,7 @@ $result = mysqli_query($conn, $query);
         <?php while ($post = mysqli_fetch_assoc($result)) { ?>
             <div class="post-card">
                 <h3><?php echo htmlspecialchars($post['title']); ?></h3>
-                <p><?php echo htmlspecialchars($post['content']); 2?></p>
+                <p><?php echo htmlspecialchars($post['content']); ?></p>
                 <div class="by">BY: <?php echo htmlspecialchars($post['username']); ?></div>
             </div>
         <?php } ?>
