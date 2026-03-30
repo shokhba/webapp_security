@@ -11,13 +11,13 @@ if (!isset($_SESSION['user_id'])) {
 $conn = mysqli_connect('localhost', 'root', '', 'webapp_security');
 
 if (isset($_POST['submit'])) {
-
     $post_title = $_POST['post_title'];
     $post_content = $_POST['post_content'];
+    $user_id = $_SESSION['user_id'];
 
-    $query = "INSERT INTO posts(title, content,user_id) 
-    VALUES('$post_title', '$post_content', '{$_SESSION['user_id']}')";
-    mysqli_query($conn, $query);
+    $stmt = $conn->prepare("INSERT INTO posts(title, content, user_id) VALUES(?, ?, ?)");
+    $stmt->bind_param("ssi", $post_title, $post_content, $user_id);
+    $stmt->execute();
 }
 
 ?>
@@ -35,11 +35,11 @@ if (isset($_POST['submit'])) {
 
 <body>
     <nav class="navbar">
-        <div class="welcome">WELCOME, <span><?php echo $_SESSION['username']; ?></span></div>
+        <div class="welcome">WELCOME, <span><?php echo htmlspecialchars($_SESSION['username']); ?></span></div>
         <div class="nav-links">
             <a href="profile.php">PROFILE</a>
             <a href="logout.php">LOGOUT</a>
-            <img src="uploads/<?php echo $_SESSION['profile_pic']; ?>" width="40" height="40">
+            <img src="uploads/<?php echo htmlspecialchars($_SESSION['profile_pic']); ?>">
         </div>
     </nav>
 

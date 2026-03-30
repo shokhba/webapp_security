@@ -8,12 +8,17 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $conn = mysqli_connect('localhost', 'root', '', 'webapp_security');
+
 $search = isset($_GET['search']) ? $_GET['search'] : '';
-$query = "SELECT posts.*, users.username 
+$search_param = "%$search%";
+
+$stmt = $conn->prepare("SELECT posts.*, users.username 
           FROM posts 
           JOIN users ON posts.user_id = users.id
-          WHERE posts.title LIKE '%$search%' OR posts.content LIKE '%$search%'";
-$result = mysqli_query($conn, $query);
+          WHERE posts.title LIKE ? OR posts.content LIKE ?");
+$stmt->bind_param("ss", $search_param, $search_param);
+$stmt->execute();
+$result = $stmt->get_result();
 ?>
 <!DOCTYPE html>
 <html lang="en">

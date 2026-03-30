@@ -16,9 +16,11 @@ $conn = mysqli_connect('localhost','root','','webapp_security');
 if(isset($_POST['submit'])){
     $post_comments = $_POST['comments'];
     $post_id = $_POST['post_id'];
-    $query = "INSERT INTO comments(content, user_id, post_id) 
-    VALUES('$post_comments', '{$_SESSION['user_id']}', '$post_id')";
-    mysqli_query($conn, $query);
+    
+    $stmt = $conn->prepare("INSERT INTO comments(content, user_id, post_id) VALUES(?, ?, ?)");
+    $stmt->bind_param("sii", $post_comments, $_SESSION['user_id'], $post_id);
+    $stmt->execute();
+    
     header('Location: posts.php');
 }
 

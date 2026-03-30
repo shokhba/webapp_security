@@ -2,7 +2,7 @@
 <?php
 session_start();
 
-if(!isset($_SESSION['user_id'])){
+if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
     exit();
 }
@@ -12,39 +12,58 @@ $conn = mysqli_connect('localhost', 'root', '', 'webapp_security');
 if (isset($_POST['submit'])) {
 
     if (!empty($_FILES['profile_img']['name'])) {
-        $file = $_FILES['profile_img'];
-        $file_name = $file['name'];
-        $file_tmp = $file['tmp_name'];
-        $upload_path = "uploads/" . $file_name;
-
-        move_uploaded_file($file_tmp, $upload_path);
-
-        $query = "UPDATE users SET profile_pic = '$file_name' WHERE id = '{$_SESSION['user_id']}'";
-        mysqli_query($conn, $query);
-
+        $file_name = $_FILES['profile_img']['name'];
+        move_uploaded_file($_FILES['profile_img']['tmp_name'], "uploads/" . $file_name);
+        $user_id = $_SESSION['user_id'];
+        $stmt = $conn->prepare("UPDATE users SET profile_pic=? WHERE id=?");
+        $stmt->bind_param("si", $file_name, $user_id);
+        $stmt->execute();
         $_SESSION['profile_pic'] = $file_name;
-
 
         echo "Upload successful!";
     }
+
     if (!empty($_POST['username'])) {
+        // Regex username
+        if (!preg_match('/^[a-zA-Z0-9_]{3,20}$/', $_POST['username'])) {
+            echo "input valid please Validate username - letters, numbers, underscore only";
+            exit();
+        }
         $username = $_POST['username'];
-        $query = "UPDATE users SET username='$username' WHERE id='{$_SESSION['user_id']}'";
-        mysqli_query($conn, $query);
+        $user_id = $_SESSION['user_id'];
+        $stmt = $conn->prepare("UPDATE users SET username=? WHERE id=?");
+        $stmt->bind_param("si", $username, $user_id);
+        $stmt->execute();
+        $_SESSION['username'] = $username;
+
         echo "Change successful!";
     }
 
     if (!empty($_POST['email'])) {
+        // Regex email
+        if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+            echo "Invalid email!";
+            exit();
+        }
         $email = $_POST['email'];
-        $query = "UPDATE users SET email='$email' WHERE id='{$_SESSION['user_id']}'";
-        mysqli_query($conn, $query);
+        $user_id = $_SESSION['user_id'];
+        $stmt = $conn->prepare("UPDATE users SET email=? WHERE id=?");
+        $stmt->bind_param("si", $email, $user_id);
+        $stmt->execute();
+
         echo "Change successful!";
     }
 
     if (!empty($_POST['password'])) {
+        // Regex password
+        if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/', $_POST['password'])) {
+            echo "Password must be 8+ chars, uppercase, lowercase, number, special character!";
+            exit();
+        }
         $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-        $query = "UPDATE users SET password='$password' WHERE id='{$_SESSION['user_id']}'";
-        mysqli_query($conn, $query);
+        $stmt = $conn->prepare("UPDATE users SET password=? WHERE id=?");
+        $stmt->bind_param("si", $password, $user_id);
+        $stmt->execute();
         echo "Change successful!";
     }
 }
